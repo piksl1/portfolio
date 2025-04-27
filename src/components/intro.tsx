@@ -54,8 +54,8 @@ export const Intro = () => {
         }}
         className="text-muted-foreground max-w-xl"
       >
-        A frontend developer based in the Poland. I&#39;m passionate about
-        building modern web applications using Next.js, React, and Tailwind CSS.
+        I&#39;m passionate about building modern web applications using Next.js,
+        React, and Tailwind CSS.
       </motion.p>
       <motion.div
         initial={{ opacity: 0, y: 100 }}
@@ -71,13 +71,18 @@ export const Intro = () => {
           </Link>
         </Button>
         <Button variant="outline" size="lg" className="hidden sm:flex" asChild>
-          <a href="/michalskolak.pdf" download>
-            Download CV <Icons.download className="ml-2 size-4" />
+          <a href="/wassimzaouicv-en.pdf" download>
+            Download CV (EN) <Icons.download className="ml-2 size-4" />
+          </a>
+        </Button>
+        <Button variant="outline" size="lg" className="hidden sm:flex" asChild>
+          <a href="/wassimzaouicv-fr.pdf" download>
+            Download CV (FR) <Icons.download className="ml-2 size-4" />
           </a>
         </Button>
         <Button variant="outline" size="icon" asChild>
           <Link
-            href="https://www.linkedin.com/in/micha%C5%82-skolak-06905524b"
+            href="https://www.linkedin.com/in/wassim-zaoui-63aa1a361/"
             aria-label="Linkedin"
             target="_blank"
           >
@@ -86,7 +91,7 @@ export const Intro = () => {
         </Button>
         <Button variant="outline" size="icon" asChild>
           <Link
-            href="https://github.com/Skolaczk"
+            href="https://github.com/piksl1"
             aria-label="Github"
             target="_blank"
           >

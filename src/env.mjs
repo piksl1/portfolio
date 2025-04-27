@@ -5,7 +5,7 @@ export const env = createEnv({
   server: {
     SITE_URL: z.string().url().optional(),
     GOOGLE_SITE_VERIFICATION_ID: z.string().min(1).optional(),
-    RESEND_API_KEY: z.string().min(1).optional(),
+    RESEND_API_KEY: z.string().min(1),
   },
   runtimeEnv: {
     SITE_URL: process.env.SITE_URL,

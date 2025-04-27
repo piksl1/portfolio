@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -15,24 +16,39 @@ import { formSchema, TFormSchema } from '@/lib/form-schema';
 import { cn } from '@/lib/utils';
 
 export const Contact = () => {
-  const { ref } = useSectionInView('Contact');
+  const { ref } = useSectionInView('Contact', 0.4);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<TFormSchema>({ resolver: zodResolver(formSchema) });
+  } = useForm<TFormSchema>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      message: '',
+    },
+  });
 
   const onSubmit = async (values: TFormSchema) => {
-    const { data, error } = await sendEmailAction(values);
+    try {
+      setIsSubmitting(true);
+      const { data, error } = await sendEmailAction(values);
 
-    if (error) {
-      toast.error(error);
-      return;
+      if (error) {
+        toast.error(error);
+        return;
+      }
+
+      toast.success(data);
+      reset();
+    } catch (error) {
+      toast.error('Something went wrong. Please try again later.');
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    toast.success(data);
-    reset();
   };
 
   return (
@@ -63,8 +79,8 @@ export const Contact = () => {
               className="text-muted-foreground hover:text-foreground h-fit p-0 font-medium underline transition-colors"
               asChild
             >
-              <Link href="mailto:skolakmichal1@gmail.com">
-                skolakmichal1@gmail.com
+              <Link href="mailto:wassim.dev03@hotmail.com">
+                wassim.dev03@hotmail.com
               </Link>
             </Button>{' '}
             or through this form.
@@ -74,6 +90,7 @@ export const Contact = () => {
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col items-center gap-5"
+        aria-label="Contact form"
       >
         <div className="w-full max-w-xl">
           <label
@@ -89,6 +106,9 @@ export const Contact = () => {
             type="email"
             id="email"
             placeholder="hello@gmail.com"
+            aria-invalid={errors.email ? 'true' : 'false'}
+            aria-describedby={errors.email ? 'email-error' : undefined}
+            disabled={isSubmitting}
             {...register('email')}
             className={cn(
               'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-2 flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
@@ -96,7 +116,7 @@ export const Contact = () => {
             )}
           />
           {errors.email?.message && (
-            <p className="text-destructive mt-1 text-sm">
+            <p className="text-destructive mt-1 text-sm" id="email-error">
               {errors.email?.message}
             </p>
           )}
@@ -114,6 +134,9 @@ export const Contact = () => {
           <textarea
             id="message"
             placeholder="Hello! What's up?"
+            aria-invalid={errors.message ? 'true' : 'false'}
+            aria-describedby={errors.message ? 'message-error' : undefined}
+            disabled={isSubmitting}
             {...register('message')}
             className={cn(
               'border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring mt-2 flex h-60 w-full resize-none rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
@@ -121,13 +144,22 @@ export const Contact = () => {
             )}
           ></textarea>
           {errors.message?.message && (
-            <p className="text-destructive mt-1 text-sm">
+            <p className="text-destructive mt-1 text-sm" id="message-error">
               {errors.message?.message}
             </p>
           )}
         </div>
-        <Button size="lg">
-          Submit <Icons.arrowRight className="ml-2 size-4" />
+        <Button size="lg" disabled={isSubmitting}>
+          {isSubmitting ? (
+            <>
+              <Icons.spinner className="mr-2 size-4 animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              Submit <Icons.arrowRight className="ml-2 size-4" />
+            </>
+          )}
         </Button>
       </form>
     </motion.section>

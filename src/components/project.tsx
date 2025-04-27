@@ -39,25 +39,26 @@ export const Project = ({ project, index }: TProps) => {
         once: true,
       }}
       custom={index}
-      className="flex flex-col rounded border p-5 md:w-1/2"
+      className="flex h-full flex-col rounded border p-5"
     >
       <Link
         href={links.github}
-        aria-label={title}
+        aria-label={`View ${title} project on GitHub`}
         target="_blank"
         className="overflow-hidden rounded"
       >
         <Image
           src={image}
-          alt={title}
+          alt={`Screenshot of ${title} project`}
           height={390}
           width={600}
           className="rounded transition-transform hover:scale-105"
+          priority={index < 2} // Prioritize loading first two images
         />
       </Link>
       <h3 className="mt-3 text-xl font-medium">{title}</h3>
       <p className="text-muted-foreground mb-2 mt-1">{description}</p>
-      <div className="flex flex-wrap gap-2">
+      <div className="mt-auto flex flex-wrap gap-2 pt-3">
         {technologies.map((tech) => (
           <span className="rounded-full border px-3 py-1 text-sm" key={tech}>
             {tech}
